@@ -1,3 +1,8 @@
+// Leetcode Link: https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/description/
+
+// Time Complexity: O(logn)
+// Space Complexity: O(1)
+
 public class FirstLastPositionOfElement {
     public static void main(String[] args) {
         int[] arr = {1, 2, 2, 2, 3, 3, 3, 4};
