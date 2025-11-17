@@ -1,7 +1,5 @@
 // Leetcode Link: https://leetcode.com/problems/single-element-in-a-sorted-array/description/
 
-
-
 public class SingleNonDuplicate {
     public static void main(String[] args) {
         int[] arr = {1,1,2,3,3,4,4,8,8};
