@@ -38,29 +38,48 @@ public class MaxUnitsInBudget {
         return ans;
     }
 
-    // TC -> O(log(max requirement * N))
+    // TC -> O(log(max requirement) * N)
     // SC -> O(1)
     static int maxUnitsBS(int[] requirement, int[] stock, int[] cost, int budget, int ans){
-        int low = 0, high = Integer.MAX_VALUE;
-        while (low < high){
-            int sum = 0;
-            int mid = low + (high - low)/2;
-            for(int j = 0; j < requirement.length; j++){
-                int p = requirement[j] * mid;
-                int need = p - stock[j];
-                if(need < 0){
-                    need = 0;
-                }
-                sum += need * cost[j];
+
+        long low = 0;
+        long high = 1;
+        while (true) {
+            long needed = moneyNeeded(requirement, stock, cost, high, budget);
+            if (needed > budget) break;
+            low = high;
+            if (high >= Integer.MAX_VALUE) {
+                high = Integer.MAX_VALUE;
+                break;
             }
-            if(sum > budget){
+            high <<= 1;
+        }
+
+        int res = (int) low;
+
+        while (low <= high) {
+            long mid = low + (high - low) / 2;
+            long needed = moneyNeeded(requirement, stock, cost, mid, budget);
+            if (needed <= budget) {
+                res = (int) Math.min(mid, Integer.MAX_VALUE);
+                low = mid + 1;
+            } else {
                 high = mid - 1;
             }
-            else {
-                ans = mid;
-                low = mid + 1;
+        }
+        return res;
+    }
+
+    static long moneyNeeded(int[] requirement, int[] stock, int[] cost, long units, int budget) {
+        long sum = 0L;
+        for (int j = 0; j < requirement.length; j++) {
+            long p = (long) requirement[j] * units; // safe multiplication
+            long need = p - stock[j];
+            if (need > 0) {
+                sum += need * (long) cost[j];
+                if (sum > budget) return sum; // early exit when already over budget
             }
         }
-        return ans;
+        return sum;
     }
 }
